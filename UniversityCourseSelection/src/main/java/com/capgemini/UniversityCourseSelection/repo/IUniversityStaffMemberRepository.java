@@ -1,5 +1,10 @@
 package com.capgemini.UniversityCourseSelection.repo;
 
-public interface IUniversityStaffMemberRepository {
+import com.capgemini.UniversityCourseSelection.entities.UniversityStaffMember;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface IUniversityStaffMemberRepository extends JpaRepository<UniversityStaffMember, Integer> {
 
 }
+
