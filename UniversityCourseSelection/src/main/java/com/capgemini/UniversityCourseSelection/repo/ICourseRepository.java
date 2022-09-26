@@ -1,5 +1,11 @@
 package com.capgemini.UniversityCourseSelection.repo;
 
-public interface ICourseRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import com.capgemini.UniversityCourseSelection.entities.Course;
+
+
+@Repository
+public interface ICourseRepo extends JpaRepository<Course, Integer> {
 
 }
