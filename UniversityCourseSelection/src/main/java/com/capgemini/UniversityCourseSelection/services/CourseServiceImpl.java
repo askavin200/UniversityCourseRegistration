@@ -1,12 +1,12 @@
-package com.capgemini.mts.service.impl;
+package com.capgemini.UniversityCourseSelection.services;
 
 import java.util.List;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.capgemini.mts.entities.Course;
-import com.capgemini.mts.repo.CourseRepo;
-import com.capgemini.mts.service.ICourseService;
+import com.capgemini.UniversityCourseSelection.entities.Course;
+import com.capgemini.UniversityCourseSelection.repo.CourseRepo;
+import com.capgemini.UniversityCourseSelection.service.ICourseService;
 
 @Service
 public class CourseServiceImpl implements ICourseService{
