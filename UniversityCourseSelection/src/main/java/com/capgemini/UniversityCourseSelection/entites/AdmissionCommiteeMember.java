@@ -1,11 +1,26 @@
 package com.capgemini.UniversityCourseSelection.entites;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "admission_committee_member")
 public class AdmissionCommiteeMember {
 
+	@Column(name = "admin_id")
 	private int adminId;
+	
+	@Column(name = "admin_name")
 	private String adminName;
+	
+	@Column(name = "admin_contact")
 	private String adminContact;
+	
+	@Column(name = "admin_username")
 	private String adminUsername;
+	
+	@Column(name = "admin_password")
 	private String adminPassword;
 
 	public AdmissionCommiteeMember() {
