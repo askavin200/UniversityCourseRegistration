@@ -1,4 +1,4 @@
-package com.capgemini.UniversityCourseSelection.entites;
+package com.capgemini.UniversityCourseSelection.entities;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;

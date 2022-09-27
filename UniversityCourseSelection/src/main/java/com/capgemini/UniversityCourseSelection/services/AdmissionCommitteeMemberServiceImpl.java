@@ -5,11 +5,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.capgemini.UniversityCourseSelection.entites.Admission;
-import com.capgemini.UniversityCourseSelection.entites.AdmissionCommiteeMember;
-import com.capgemini.UniversityCourseSelection.entites.AdmissionStatus;
-import com.capgemini.UniversityCourseSelection.entites.Applicant;
-import com.capgemini.UniversityCourseSelection.entites.Course;
+import com.capgemini.UniversityCourseSelection.entities.Admission;
+import com.capgemini.UniversityCourseSelection.entities.AdmissionCommiteeMember;
+import com.capgemini.UniversityCourseSelection.entities.AdmissionStatus;
+import com.capgemini.UniversityCourseSelection.entities.Applicant;
+import com.capgemini.UniversityCourseSelection.entities.Course;
 import com.capgemini.UniversityCourseSelection.repo.IAdmissionCommiteeMemberRepository;
 
 public class AdmissionCommitteeMemberServiceImpl implements IAdmissionCommiteeMemberService {

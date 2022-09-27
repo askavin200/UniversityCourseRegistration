@@ -2,8 +2,8 @@ package com.capgemini.UniversityCourseSelection.services;
 
 import java.util.List;
 
-import com.capgemini.UniversityCourseSelection.entites.AdmissionStatus;
-import com.capgemini.UniversityCourseSelection.entites.Applicant;
+import com.capgemini.UniversityCourseSelection.entities.AdmissionStatus;
+import com.capgemini.UniversityCourseSelection.entities.Applicant;
 import com.capgemini.UniversityCourseSelection.repo.IApplicantRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;

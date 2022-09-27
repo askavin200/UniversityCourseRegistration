@@ -1,10 +1,10 @@
 package com.capgemini.UniversityCourseSelection.repo;
 
+import com.capgemini.UniversityCourseSelection.entities.AdmissionCommiteeMember;
+import com.capgemini.UniversityCourseSelection.entities.Course;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-
-import com.capgemini.UniversityCourseSelection.entites.AdmissionCommiteeMember;
-import com.capgemini.UniversityCourseSelection.entites.Course;
 
 public interface IAdmissionCommiteeMemberRepository extends JpaRepository<AdmissionCommiteeMember, Integer> {
 
