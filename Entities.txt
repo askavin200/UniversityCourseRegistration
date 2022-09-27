@@ -25,12 +25,13 @@ Applicant:
     admission(one-to-one bidirectional)
 
 Course:
-    courseId
-    courseName
-    courseDuration
-    courseStartDate
-    courseEndDate
-    courseFees
+    courseId    (course_Id)                 : int
+    courseName  (course_Name)               : String
+    courseDuration  (course_Duration)       : String
+    courseStartDate (course_StartDate)      : LocalDate
+    courseEndDate   (course_EndDate)        : LocalDate
+    courseFees      (course_Fees)           : String
+    courseCrieteria (course_Crieteria)      : double
 
 UniversityStaffMember
     staffId  (staff_id) : int
