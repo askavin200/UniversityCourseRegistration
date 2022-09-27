@@ -7,12 +7,12 @@ Admission:
     admissionDate
     Status (one to one unidirectional)
 
-AdmissionCommiteeMember:
-    adminId
-    adminName
-    adminContact
-    adminUsername
-    adminPassword
+AdmissionCommiteeMember: (admission_committee_member)
+    adminId (admin_id)
+    adminName (admin_name)
+    adminContact (admin_contact)
+    adminUsername (admin_username)
+    adminPassword (admin_password)
 
 Applicant:
     applicantId
