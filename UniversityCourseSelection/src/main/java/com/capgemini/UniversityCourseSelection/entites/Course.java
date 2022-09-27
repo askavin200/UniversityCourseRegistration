@@ -1,4 +1,4 @@
-package com.capgemini.UniversityCourseSelection.entities;
+package com.capgemini.UniversityCourseSelection.entites;
 
 import java.time.LocalDate;
 import javax.persistence.Column;
@@ -47,5 +47,8 @@ public class Course {
 	
 	@Column(name = "course_Fees")
 	private String courseFees;
+	
+	@Column(name = "course_Crieteria")
+	private double courseCrieteria;
 
 }
