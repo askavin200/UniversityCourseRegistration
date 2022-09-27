@@ -1,8 +1,9 @@
 package com.capgemini.UniversityCourseSelection.repo;
 
+import com.capgemini.UniversityCourseSelection.entities.Course;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import com.capgemini.UniversityCourseSelection.entites.Course;
 
 
 @Repository

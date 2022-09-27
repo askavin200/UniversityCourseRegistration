@@ -2,10 +2,10 @@ package com.capgemini.UniversityCourseSelection.services;
 
 import java.util.List;
 
-import com.capgemini.UniversityCourseSelection.entites.Admission;
-import com.capgemini.UniversityCourseSelection.entites.AdmissionCommiteeMember;
-import com.capgemini.UniversityCourseSelection.entites.AdmissionStatus;
-import com.capgemini.UniversityCourseSelection.entites.Applicant;
+import com.capgemini.UniversityCourseSelection.entities.Admission;
+import com.capgemini.UniversityCourseSelection.entities.AdmissionCommiteeMember;
+import com.capgemini.UniversityCourseSelection.entities.AdmissionStatus;
+import com.capgemini.UniversityCourseSelection.entities.Applicant;
 
 public interface IAdmissionCommiteeMemberService {
 
