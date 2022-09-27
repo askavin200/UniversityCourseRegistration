@@ -2,12 +2,12 @@ package com.capgemini.UniversityCourseSelection.repo;
 
 import java.util.List;
 
-import com.capgemini.UniversityCourseSelection.entities.AdmissionStatus;
-import com.capgemini.UniversityCourseSelection.entities.Applicant;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
+import com.capgemini.UniversityCourseSelection.entities.AdmissionStatus;
+import com.capgemini.UniversityCourseSelection.entities.Applicant;
 
 
 
