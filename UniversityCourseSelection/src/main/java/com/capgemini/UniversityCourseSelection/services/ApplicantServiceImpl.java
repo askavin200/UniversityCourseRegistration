@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class ApplicantServiceImpl implements IApplicantService {
 	
 	@Autowired
-	IApplicantRepository repo;
+	private IApplicantRepository repo;
 
 	@Override
 	public Applicant addApplicant(Applicant app) {
