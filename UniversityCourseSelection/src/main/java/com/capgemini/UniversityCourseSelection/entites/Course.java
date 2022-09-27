@@ -47,5 +47,8 @@ public class Course {
 	
 	@Column(name = "course_Fees")
 	private String courseFees;
+	
+	@Column(name = "course_Crieteria")
+	private double courseCrieteria;
 
 }
