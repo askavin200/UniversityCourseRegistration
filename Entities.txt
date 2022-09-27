@@ -33,9 +33,9 @@ Course:
     courseFees
 
 UniversityStaffMember
-    staffId
-    password
-    Role
+    staffId  (staff_id) : int
+    password (password) : String
+    Role     (role)     : String
 
 LoginCredentials
     userName
