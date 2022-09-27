@@ -1,4 +1,4 @@
-package com.capgemini.UniversityCourseSelection.entities;
+package com.capgemini.UniversityCourseSelection.entites;
 
 import java.time.LocalDate;
 import javax.persistence.Column;
