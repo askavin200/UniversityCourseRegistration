@@ -21,10 +21,18 @@ public class Applicant {
 	@Column(name = "id")
 	private Integer applicantId;
 	
+	
+	@Column(name = "name")
 	private String applicantName;
+	
+	@Column(name="mobile_number")
 	private long mobileNumber;
+	
+	@Column(name="Degree")
 	private String applicantDegree;
-	private double GraduationPassword;
+	
+	@Column(name="grad_percentage")
+	private double applicantGraduationPercentage;
 	
 	private String password; //added field
 	
