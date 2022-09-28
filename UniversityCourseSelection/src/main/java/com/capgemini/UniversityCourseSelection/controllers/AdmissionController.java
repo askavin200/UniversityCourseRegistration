@@ -47,7 +47,7 @@ public class AdmissionController {
 	} 
     
 	
-	@GetMapping("/all/admission/{courseId}")
+	@GetMapping("/alladmissionbyId/{courseId}")
     public ResponseEntity<List<Admission>> showAllAdmissionByCourseId(@PathVariable int courseId ){
 		List<Admission> ref = service.showAllAdmissionByCourseId(courseId);
 		return new ResponseEntity<>(ref,HttpStatus.OK);
@@ -55,10 +55,12 @@ public class AdmissionController {
     
 	
 	
-	@GetMapping("/all/admission/{date}")
-    public ResponseEntity<List<Admission>> addAdmissionByDate(@PathVariable LocalDate date){
+	@GetMapping("/alladmissionby/{date}")
+    public ResponseEntity<List<Admission>> showAdmissionByDate(@PathVariable LocalDate date){
 		List<Admission> ref = service.showAllAdmissionbyDate(date);
 		return new ResponseEntity<>(ref, HttpStatus.OK);
 	} 
     
 }
+
+
