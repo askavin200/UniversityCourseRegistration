@@ -2,9 +2,12 @@ package com.capgemini.UniversityCourseSelection.services;
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.capgemini.UniversityCourseSelection.entities.Admission;
 import com.capgemini.UniversityCourseSelection.repo.IAdmissionRepository;
 
+@Component
 public class AdmissionServiceImpl implements IAdmissionService {
 	
 	@Autowired
@@ -44,7 +47,7 @@ public class AdmissionServiceImpl implements IAdmissionService {
 
 	@Override
 	public List<Admission> showAllAdmissionbyDate(LocalDate date) {
-		List<Admission> admissionlist = admissionrepo.findAllAdmissionByDate(date);	
+		List<Admission> admissionlist = admissionrepo.findAllAdmissionByAdmissionDate(date);	
 		return admissionlist;	
 	}
 
