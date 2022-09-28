@@ -74,7 +74,10 @@ public class AdmissionCommitteeMemberServiceImpl implements IAdmissionCommiteeMe
 		// criteria 1 satisfied
 
 		// criteria 2 ( percentage )
-		double courseCriteria = course.getCourseCrieteria();
+
+		double courseCriteria = course.getCourseCriteria();
+
+
 		double marks = applicant.getApplicantGraduationPercentage();
 
 		if (marks < courseCriteria) {

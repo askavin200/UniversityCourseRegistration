@@ -11,12 +11,16 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "courses")
 public class Course {
@@ -48,7 +52,7 @@ public class Course {
 	@Column(name = "course_Fees")
 	private String courseFees;
 	
-	@Column(name = "course_Crieteria")
-	private double courseCrieteria;
+	@Column(name = "course_Criteria")
+	private double courseCriteria;
 
 }

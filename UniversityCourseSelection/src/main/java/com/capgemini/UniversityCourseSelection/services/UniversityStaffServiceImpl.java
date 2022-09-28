@@ -8,9 +8,9 @@ import com.capgemini.UniversityCourseSelection.repo.ICourseRepository;
 import com.capgemini.UniversityCourseSelection.repo.IUniversityStaffMemberRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class UniversityStaffServiceImpl implements IUniversityStaffService{
 	
 	@Autowired

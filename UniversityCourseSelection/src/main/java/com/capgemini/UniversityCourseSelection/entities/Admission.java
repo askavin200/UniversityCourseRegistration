@@ -1,11 +1,14 @@
 package com.capgemini.UniversityCourseSelection.entities;
 
 import java.time.LocalDate;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -18,7 +21,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "admission_details")
-public class Admission {
+public class Admission {	
+
 
 	@Id
 	@Column(name = "admission_id")
@@ -28,13 +32,15 @@ public class Admission {
 	@Column(name = "course_id")
 	private int courseId;
 
-	@Column(name = "applicant_id")
-	private int applicantId;
+    @Column(name = "applicant_id")
+    private int applicantId;
+
 
 	@Column(name = "admission_date")
 	@JsonFormat(pattern = "dd-MMM-yyyy")
 	private LocalDate admissionDate;
 	
+
 	private AdmissionStatus status;
 	
 	public Admission() {
@@ -50,8 +56,5 @@ public class Admission {
 	}
 	
 
-//	@OneToOne(mappedBy = "admission")
-//	@JoinColumn(name = "applicant_id", referencedColumnName = "id")
-//	private Applicant applicant;
 
 }

@@ -61,5 +61,8 @@ public class Applicant {
 		status= AdmissionStatus.APPLIED;
 	}
 	
+	
+	// this is a comment to check integration
+	
 
 }
