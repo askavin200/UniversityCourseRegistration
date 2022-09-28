@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -45,7 +46,8 @@ public class Admission {
 	@JsonFormat(pattern="dd-MMM-yyyy")
 	private LocalDate admissionDate;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "admission")
+	@JoinColumn(name = "applicant_id", referencedColumnName = "id")
 	private Applicant applicant;
 
 }

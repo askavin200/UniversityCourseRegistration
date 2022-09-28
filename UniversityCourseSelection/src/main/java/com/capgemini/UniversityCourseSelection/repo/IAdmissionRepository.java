@@ -13,6 +13,6 @@ public interface IAdmissionRepository extends JpaRepository<Admission,Integer> {
 
 	public List<Admission> findAllAdmissionByCourseId(int courseId);
 	
-	public List<Admission> findAllAdmissionByDate(LocalDate date);
+	public List<Admission> findAllAdmissionByAdmissionDate(LocalDate date);
 }
 
