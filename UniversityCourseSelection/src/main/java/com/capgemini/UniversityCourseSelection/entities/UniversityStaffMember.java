@@ -19,6 +19,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UniversityStaffMember {
 	
+	//comment for cheking git integration
+	
 	@Id
 	@Column(name = "staff_Id")
 	@SequenceGenerator(
