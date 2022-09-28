@@ -1,9 +1,10 @@
 package com.capgemini.UniversityCourseSelection.services;
 
 import java.util.List;
+import java.util.Optional;
 
-import com.capgemini.UniversityCourseSelection.entites.AdmissionStatus;
-import com.capgemini.UniversityCourseSelection.entites.Applicant;
+import com.capgemini.UniversityCourseSelection.entities.AdmissionStatus;
+import com.capgemini.UniversityCourseSelection.entities.Applicant;
 import com.capgemini.UniversityCourseSelection.repo.IApplicantRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,9 @@ public class ApplicantServiceImpl implements IApplicantService {
 
 	@Override
 	public Applicant addApplicant(Applicant app) {
-		return repo.save(app);
+		Applicant temp=repo.save(app);
+		temp.getAdmission().setApplicantId(temp.getApplicantId());
+		return repo.save(temp);
 	}
 
 	@Override
@@ -33,8 +36,8 @@ public class ApplicantServiceImpl implements IApplicantService {
 	}
 
 	@Override
-	public Applicant viewApplicant(int id) {
-	   Applicant res= repo.findById(id).get();
+	public Optional<Applicant> viewApplicant(int id) {
+	   Optional<Applicant> res= repo.findById(id);
 	   return res;
 	}
 

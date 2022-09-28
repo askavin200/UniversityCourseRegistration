@@ -1,0 +1,48 @@
+Following are the entities for UniversityCourseRegistration
+
+Admission:
+    admissionId
+    courseId
+    applicantId (one-to-one bidirectional)	
+    admissionDate
+    Status (one to one unidirectional)
+
+AdmissionCommiteeMember: (admission_committee_member)
+    adminId (admin_id)
+    adminName (admin_name)
+    adminContact (admin_contact)
+    adminUsername (admin_username)
+    adminPassword (admin_password)
+
+Applicant:
+    applicantId
+    applicantName
+    mobileNumber
+    applicantDegree
+    GraduationPercentage
+    applicantPassword
+    status(one-to-one unidirectional)
+    admission(one-to-one bidirectional)
+
+Course:
+    courseId    (course_Id)                 : int
+    courseName  (course_Name)               : String
+    courseDuration  (course_Duration)       : String
+    courseStartDate (course_StartDate)      : LocalDate
+    courseEndDate   (course_EndDate)        : LocalDate
+    courseFees      (course_Fees)           : String
+    courseCrieteria (course_Crieteria)      : double
+
+UniversityStaffMember
+    staffId  (staff_id) : int
+    password (password) : String
+    Role     (role)     : String
+
+LoginCredentials
+    userName
+    Password
+    userType
+
+
+AdmissionStatus(Enumeration):
+    Applied, Pending, Confirmed, Rejected
