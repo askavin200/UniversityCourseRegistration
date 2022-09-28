@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/applicant")
@@ -53,9 +54,12 @@ public class ApplicantController {
 	
 	@GetMapping("/get/{id}")
 	public ResponseEntity<Applicant> getById(@PathVariable("id") Integer id){
-		Applicant temp= service.viewApplicant(id);
-		
-		return new ResponseEntity<>(temp,HttpStatus.OK);
+		Optional<Applicant> temp= service.viewApplicant(id);
+		if(temp.isEmpty()) {
+			return new ResponseEntity("No such user",HttpStatus.NOT_FOUND);
+					
+		}
+		return new ResponseEntity<>(temp.get(),HttpStatus.OK);
 	}
 	
 	@GetMapping("/getAll")

@@ -8,7 +8,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,6 +16,19 @@ import lombok.Setter;
 @Setter
 public class Applicant {
 	
+	public Applicant(Integer applicantId, String applicantName, long mobileNumber, String applicantDegree,
+			double applicantGraduationPercentage, String password, Admission admission) {
+		super();
+		this.applicantId = applicantId;
+		this.applicantName = applicantName;
+		this.mobileNumber = mobileNumber;
+		this.applicantDegree = applicantDegree;
+		this.applicantGraduationPercentage = applicantGraduationPercentage;
+		this.password = password;
+		this.admission = admission;
+	}
+
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -42,6 +54,12 @@ public class Applicant {
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "admission_id", referencedColumnName = "admission_id")
 	private Admission admission;
+	
+	
+	public Applicant() {
+		super();
+		status= AdmissionStatus.APPLIED;
+	}
 	
 
 }
