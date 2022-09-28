@@ -2,6 +2,7 @@ package com.capgemini.UniversityCourseSelection.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
@@ -9,6 +10,7 @@ import javax.persistence.Table;
 public class AdmissionCommiteeMember {
 
 	@Column(name = "admin_id")
+	@Id
 	private int adminId;
 	
 	@Column(name = "admin_name")

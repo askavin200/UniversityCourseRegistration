@@ -16,13 +16,15 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "admission_details")
-public class Admission {
+public class Admission {	
 	
 	@Id
 	@Column(name = "admission_id")
@@ -38,14 +40,14 @@ public class Admission {
 	@Column(name = "course_id")
 	private int courseId;
 	
-	@Column(name = "applicant_id")
-	private int applicantId;
+//	@Column(name = "applicant_id")
+//	private int applicantId;
 	
 	@Column(name = "admission_date")
 	@JsonFormat(pattern="dd-MMM-yyyy")
 	private LocalDate admissionDate;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL,mappedBy = "admission")
 	private Applicant applicant;
 
 }

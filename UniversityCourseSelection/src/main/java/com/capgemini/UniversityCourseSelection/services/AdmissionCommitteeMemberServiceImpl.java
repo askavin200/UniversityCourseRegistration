@@ -74,7 +74,7 @@ public class AdmissionCommitteeMemberServiceImpl implements IAdmissionCommiteeMe
 
 		// criteria 2 ( percentage )
 		double courseCriteria = course.getCourseCriteria();
-		double marks = applicant.getApplicantGraduationPercent();
+		double marks = applicant.getApplicantGraduationPercentage();
 
 		if (marks < courseCriteria) {
 			// set the status for the admission and applicant as PENDING object and save them
