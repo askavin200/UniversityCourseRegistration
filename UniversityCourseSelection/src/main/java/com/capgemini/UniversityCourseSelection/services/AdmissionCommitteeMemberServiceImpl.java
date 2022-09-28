@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.capgemini.UniversityCourseSelection.entities.Admission;
 import com.capgemini.UniversityCourseSelection.entities.AdmissionCommiteeMember;
@@ -11,15 +12,16 @@ import com.capgemini.UniversityCourseSelection.entities.AdmissionStatus;
 import com.capgemini.UniversityCourseSelection.entities.Applicant;
 import com.capgemini.UniversityCourseSelection.entities.Course;
 import com.capgemini.UniversityCourseSelection.repo.IAdmissionCommiteeMemberRepository;
+import com.capgemini.UniversityCourseSelection.repo.IApplicantRepository;
 
+@Component
 public class AdmissionCommitteeMemberServiceImpl implements IAdmissionCommiteeMemberService {
 
 	@Autowired
 	private IAdmissionCommiteeMemberRepository repo;
 
 	@Autowired
-	IApplicantService applicantRepo;
-
+	private IApplicantRepository applicantRepo;
 
 	@Override
 	public AdmissionCommiteeMember addCommitteeMember(AdmissionCommiteeMember member) {
@@ -58,7 +60,7 @@ public class AdmissionCommitteeMemberServiceImpl implements IAdmissionCommiteeMe
 
 		// if course is not found, return admission status as rejected/pending
 		if (course == null) {
-			return AdmissionStatus.REJECTED;
+			applicant.setStatus(AdmissionStatus.PENDING);
 		}
 
 		// criteria 1 (admission date)
@@ -66,26 +68,31 @@ public class AdmissionCommitteeMemberServiceImpl implements IAdmissionCommiteeMe
 		LocalDate courseStartDate = course.getCourseStartDate();
 
 		if (admissionDate.isAfter(courseStartDate)) {
-			// set the status for the admission and applicant as REJECTED object and save them
-			// confused , whether we have to save or not
-			return AdmissionStatus.REJECTED;
+			applicant.setStatus(AdmissionStatus.REJECTED);
 		}
+		
 		// criteria 1 satisfied
 
 		// criteria 2 ( percentage )
+<<<<<<< HEAD
 		double courseCriteria = course.getCourseCriteria();
+=======
+		double courseCriteria = course.getCourseCrieteria();
+>>>>>>> branch 'main' of git@github.com:raf2723/UniversityCourseRegistration.git
 		double marks = applicant.getApplicantGraduationPercentage();
 
 		if (marks < courseCriteria) {
-			// set the status for the admission and applicant as PENDING object and save them
-			// confused , whether we have to save or not
-			return AdmissionStatus.PENDING;
+			applicant.setStatus(AdmissionStatus.PENDING);
+		}
+		else
+		{
+			applicant.setStatus(AdmissionStatus.CONFIRMED);
 		}
 
 		// criteria 2 satisfied
-		// change the admission and applicant status as confirmed
-		return AdmissionStatus.CONFIRMED;
-
+		applicantRepo.save(applicant);
+		return applicant.getStatus();
+		
 	}
 
 }

@@ -8,10 +8,18 @@ import com.capgemini.UniversityCourseSelection.repo.ICourseRepository;
 import com.capgemini.UniversityCourseSelection.repo.IUniversityStaffMemberRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+<<<<<<< HEAD
 import org.springframework.stereotype.Service;
+=======
+import org.springframework.stereotype.Component;
+>>>>>>> branch 'main' of git@github.com:raf2723/UniversityCourseRegistration.git
 
+<<<<<<< HEAD
 
 @Service
+=======
+@Component
+>>>>>>> branch 'main' of git@github.com:raf2723/UniversityCourseRegistration.git
 public class UniversityStaffServiceImpl implements IUniversityStaffService{
 	
 	@Autowired

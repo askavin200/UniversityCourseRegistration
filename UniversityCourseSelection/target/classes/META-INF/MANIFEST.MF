@@ -1,6 +1,15 @@
+<<<<<<< HEAD
 Manifest-Version: 1.0
 Build-Jdk-Spec: 16
 Implementation-Title: UniversityCourseSelection
 Implementation-Version: 0.0.1-SNAPSHOT
 Created-By: Maven Integration for Eclipse
 
+=======
+Manifest-Version: 1.0
+Build-Jdk-Spec: 16
+Implementation-Title: UniversityCourseSelection
+Implementation-Version: 0.0.1-SNAPSHOT
+Created-By: Maven Integration for Eclipse
+
+>>>>>>> branch 'main' of git@github.com:raf2723/UniversityCourseRegistration.git
