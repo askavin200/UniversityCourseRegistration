@@ -2,11 +2,10 @@ package com.capgemini.UniversityCourseSelection.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-<<<<<<< HEAD
-=======
+
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
->>>>>>> branch 'main' of git@github.com:raf2723/UniversityCourseRegistration.git
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -14,7 +13,7 @@ import javax.persistence.Table;
 @Table(name = "admission_committee_member")
 public class AdmissionCommiteeMember {
 
-	@Id
+	
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "admin_id")
 	@Id

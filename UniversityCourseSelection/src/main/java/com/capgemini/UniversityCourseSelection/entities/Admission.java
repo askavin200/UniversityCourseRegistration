@@ -41,9 +41,6 @@ public class Admission {
 	private LocalDate admissionDate;
 	
 
-	@OneToOne(cascade = CascadeType.ALL,mappedBy = "admission")
-	private Applicant applicant;
-
 	private AdmissionStatus status;
 	
 	public Admission() {
@@ -58,10 +55,6 @@ public class Admission {
 		this.admissionDate = admissionDate;
 	}
 	
-
-//	@OneToOne(mappedBy = "admission")
-//	@JoinColumn(name = "applicant_id", referencedColumnName = "id")
-//	private Applicant applicant;
 
 
 }

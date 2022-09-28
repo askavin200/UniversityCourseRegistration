@@ -8,12 +8,10 @@ import com.capgemini.UniversityCourseSelection.entities.Applicant;
 import com.capgemini.UniversityCourseSelection.repo.IApplicantRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 
 @Service
-@Component
 public class ApplicantServiceImpl implements IApplicantService {
 	
 	@Autowired

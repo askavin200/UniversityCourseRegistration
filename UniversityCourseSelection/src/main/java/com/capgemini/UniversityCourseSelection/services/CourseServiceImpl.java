@@ -10,8 +10,8 @@ import com.capgemini.UniversityCourseSelection.entities.Course;
 import com.capgemini.UniversityCourseSelection.repo.ICourseRepository;
 
 
-@Service
-@Component
+//@Service
+//@Component
 public class CourseServiceImpl implements ICourseService{
 	
 	@Autowired

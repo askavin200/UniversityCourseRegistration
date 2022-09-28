@@ -39,13 +39,6 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-<<<<<<< HEAD
-		<dependency>
-	    <groupId>org.postgresql</groupId>
-	    <artifactId>postgresql</artifactId>
-	    <version>42.2.2</version>
-	</dependency>
-=======
 
 		<!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
 		<dependency>
@@ -54,7 +47,6 @@
 			<version>42.4.1</version>
 		</dependency>
 
->>>>>>> branch 'main' of git@github.com:raf2723/UniversityCourseRegistration.git
 	</dependencies>
 
 	<build>

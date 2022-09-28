@@ -74,11 +74,10 @@ public class AdmissionCommitteeMemberServiceImpl implements IAdmissionCommiteeMe
 		// criteria 1 satisfied
 
 		// criteria 2 ( percentage )
-<<<<<<< HEAD
+
 		double courseCriteria = course.getCourseCriteria();
-=======
-		double courseCriteria = course.getCourseCrieteria();
->>>>>>> branch 'main' of git@github.com:raf2723/UniversityCourseRegistration.git
+
+
 		double marks = applicant.getApplicantGraduationPercentage();
 
 		if (marks < courseCriteria) {
