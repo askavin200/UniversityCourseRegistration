@@ -43,10 +43,14 @@ public class Course {
 	
 	@Column(name = "course_StartDate")
 	@JsonFormat(pattern="dd-MMM-yyyy")
+	@JsonDeserialize(using = LocalDateDeserializer.class)  
+	@JsonSerialize(using = LocalDateSerializer.class)
 	private LocalDate courseStartDate;
 	
 	@Column(name = "course_EndDate")
 	@JsonFormat(pattern="dd-MMM-yyyy")
+	@JsonDeserialize(using = LocalDateDeserializer.class)  
+	@JsonSerialize(using = LocalDateSerializer.class)
 	private LocalDate courseEndDate;
 	
 	@Column(name = "course_Fees")
