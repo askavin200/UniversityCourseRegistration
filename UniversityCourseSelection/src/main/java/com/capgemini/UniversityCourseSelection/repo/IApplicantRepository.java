@@ -19,5 +19,9 @@ public interface IApplicantRepository extends JpaRepository<Applicant, Integer>{
 	List<Applicant> viewAllApplicantByCourse(int status);
 	
 	
+	@Query(value="select * from Applicant where id=?1 and password=?2",nativeQuery = true)
+	Applicant verifyApplicantCredentials(int id,String password);
+	
+	
 
 }
