@@ -33,7 +33,7 @@ public class Course {
 	@GeneratedValue(
 			strategy = GenerationType.SEQUENCE,
 			generator = "course_sequence")
-	private int courseId;
+	private Integer courseId;
 	
 	@Column(name = "course_Name")
 	private String courseName;
