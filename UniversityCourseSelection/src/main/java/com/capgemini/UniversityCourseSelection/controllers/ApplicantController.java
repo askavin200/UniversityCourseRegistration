@@ -65,7 +65,7 @@ public class ApplicantController {
 	@GetMapping("/getAll/{status}")
 	public ResponseEntity<List<Applicant>> getAllApplicants(@PathVariable int status){
 		
-		List<Applicant> res= service.viewAllApplicants	ByStatus(status);
+		List<Applicant> res= service.viewAllApplicantsByStatus(status);
 		return new ResponseEntity<>(res,HttpStatus.OK);
 		
 	}
