@@ -42,7 +42,7 @@ public class ApplicantServiceImpl implements IApplicantService {
 	}
 
 	@Override
-	public List<Applicant> viewAllApplicantsByStatus(AdmissionStatus status) {
+	public List<Applicant> viewAllApplicantsByStatus(int status) {
 		  return repo.viewAllApplicantByCourse(status);
 	}
 
