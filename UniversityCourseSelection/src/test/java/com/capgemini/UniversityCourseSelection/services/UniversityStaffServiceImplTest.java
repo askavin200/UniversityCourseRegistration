@@ -24,9 +24,11 @@ class UniversityStaffServiceImplTest {
 	
 	@Mock
 	private IUniversityStaffMemberRepository staffRepo;
-//	private ICourseServiceImpl courseService;
+	@Mock
+	private ICourseService courseService;
 	@InjectMocks
 	private UniversityStaffServiceImpl staffService;
+	
 	
 	UniversityStaffMember STAFF_1 = new UniversityStaffMember(1,"password1","role1");
 	UniversityStaffMember STAFF_2 = new UniversityStaffMember(2,"password2","role2");
@@ -81,24 +83,38 @@ class UniversityStaffServiceImplTest {
 		assertEquals("role3", staffService.viewAllStaffs().get(2).getRole());
 	}
 	
-//	@Test
-//	void addCourse_success() {
-//		Mockito.when(courseService.addCourse(COURSE_1)).thenReturn(COURSE_1);
-//		assertEquals(COURSE_1,staffService.addCourse(COURSE_1));
-//	}
-//	
-//	@Test
-//	void updateCourse_success() {
-//		Course updateCourse = new Course(1,"Python Programming","2 months",LocalDate.of(2022, 6, 25),LocalDate.of(2022, 8, 25),"700",96.5);
-//		Mockito.when(courseService.updateCourse(updateCourse)).thenReturn(updateCourse);
-//		assertEquals(updateCourse,staffService.addCourse(updateCourse));
-//	}
-//	
-//	@Test
-//	void removeCourse_success() {
-//		Mockito.when(courseService.removeCourse(COURSE_1.getCourseId())).thenReturn(COURSE_1);
-//		assertEquals(COURSE_1,staffService.addCourse(COURSE_1));
-//	}
+	@Test
+	void addCourse_success() {
+		
+		Mockito.when(courseService.addCourse(COURSE_1)).thenReturn(COURSE_1);
+		assertEquals(COURSE_1,staffService.addCourse(COURSE_1));
+	}
+	
+	@Test
+	void updateCourse_success() {
+		Course updateCourse = new Course(1,"Python Programming","2 months",LocalDate.of(2022, 6, 25),LocalDate.of(2022, 8, 25),"700",96.5);
+		Mockito.when(courseService.updateCourse(updateCourse)).thenReturn(updateCourse);
+		assertEquals(updateCourse,staffService.updateCourse(updateCourse));
+	}
+	
+	@Test
+	void updateCourse_failWhenNotFound() {
+		Course updateCourse = new Course(1,"Python Programming","2 months",LocalDate.of(2022, 6, 25),LocalDate.of(2022, 8, 25),"700",96.5);
+		Mockito.when(courseService.updateCourse(updateCourse)).thenThrow(new NotFoundException());
+		assertThrows(NotFoundException.class,()->{courseService.updateCourse(updateCourse);});
+	}
+	
+	@Test
+	void removeCourse_success() {
+		Mockito.when(courseService.removeCourse(COURSE_1.getCourseId())).thenReturn(COURSE_1);
+		assertEquals(COURSE_1,staffService.removeCourse(COURSE_1));
+	}
+	
+	@Test
+	void removeCourse_failWhenNotFound() {
+		Mockito.when(courseService.removeCourse(COURSE_1.getCourseId())).thenThrow(new NotFoundException());
+		assertThrows(NotFoundException.class,()->{courseService.removeCourse(COURSE_1.getCourseId());});
+	}
 		
 	@Test
 	void updateStaff_failWhenNotFound() {
@@ -125,7 +141,5 @@ class UniversityStaffServiceImplTest {
 		Mockito.when(staffRepo.findAll()).thenReturn(res);
 		assertEquals(true, staffService.viewAllStaffs().isEmpty());
 	}
-	
-
 	
 }
