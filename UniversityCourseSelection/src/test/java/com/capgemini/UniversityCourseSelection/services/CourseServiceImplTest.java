@@ -83,13 +83,13 @@ class CourseServiceImplTest {
 		});
 	}
 	
-//	@Test
-//	void removeCourse_failWhenNotFound() {
-//		Mockito.when(courseRepo.existsById(3)).thenReturn(false);
-//		assertThrows(NotFoundException.class, ()->{
-//			courseService.removeCourse(3);
-//		});
-//	}
+	@Test
+	void removeCourse_failWhenNotFound() {
+		Mockito.when(courseRepo.existsById(3)).thenReturn(false);
+		assertThrows(NotFoundException.class, ()->{
+			courseService.removeCourse(3);
+		});
+	}
 	
 //	@Test
 //	void updateCourse_failWhenNotFound() {

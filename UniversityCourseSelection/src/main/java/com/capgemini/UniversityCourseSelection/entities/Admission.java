@@ -38,6 +38,8 @@ public class Admission {
 
 	@Column(name = "admission_date")
 	@JsonFormat(pattern = "dd-MMM-yyyy")
+	@JsonDeserialize(using = LocalDateDeserializer.class)  
+	@JsonSerialize(using = LocalDateSerializer.class)
 	private LocalDate admissionDate;
 	
 
