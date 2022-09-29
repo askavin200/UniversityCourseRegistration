@@ -11,6 +11,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.capgemini.UniversityCourseSelection.entities.AdmissionCommiteeMember;
+import com.capgemini.UniversityCourseSelection.exception.NotFoundException;
 import com.capgemini.UniversityCourseSelection.repo.IAdmissionCommiteeMemberRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -51,7 +52,7 @@ class AdmissionCommitteeMemberServiceImplTest {
 	@Test
 	public void testRemoveCommitteeMember_success()
 	{
-		Mockito.when(repo.existsById(1)).thenReturn(true);
+		Mockito.when(repo.existsById(mem.getAdminId())).thenReturn(true);
 		boolean success = true;
 		try {
 			service.removeCommitteeMember(1);
@@ -73,29 +74,37 @@ class AdmissionCommitteeMemberServiceImplTest {
 	}
 	
 	@Test
-	public void testUpdateCommitteeMember_failure()
+	public void testUpdateCommitteeMember_failureWhenNull()
 	{
-		Mockito.when(repo.existsById(1)).thenReturn(true);
-		Mockito.when(repo.save(mem)).thenThrow(new IllegalArgumentException());
+		Mockito.when(repo.existsById(mem.getAdminId())).thenThrow(new IllegalArgumentException());
 		assertThrows(IllegalArgumentException.class, () -> {
 			service.updateCommitteeMember(mem);
 		});
 	}
 	
 	@Test
-	public void testViewCommitteeMember_failure()
+	public void testUpdateCommitteeMember_failureWhenNotFound()
 	{
-		Mockito.when(repo.existsById(1)).thenThrow(new IllegalArgumentException());
-		assertThrows(IllegalArgumentException.class, () -> {
+		Mockito.when(repo.existsById(mem.getAdminId())).thenReturn(false);
+		assertThrows(NotFoundException.class, () -> {
+			service.updateCommitteeMember(mem);
+		});
+	}
+	
+	@Test
+	public void testViewCommitteeMember_failureWhenNotFound()
+	{
+		Mockito.when(repo.existsById(1)).thenReturn(false);
+		assertThrows(NotFoundException.class, () -> {
 			service.viewCommitteeMember(1);
 		});
 	}
 
 	@Test
-	public void testRemoveCommitteeMember_failure()
+	public void testRemoveCommitteeMember_failureWhenNotFound()
 	{
-		Mockito.when(repo.existsById(1)).thenThrow(new IllegalArgumentException());
-		assertThrows(IllegalArgumentException.class, () -> {
+		Mockito.when(repo.existsById(1)).thenReturn(false);
+		assertThrows(NotFoundException.class, () -> {
 			service.removeCommitteeMember(1);
 		});
 	}
