@@ -16,7 +16,7 @@ public interface IApplicantRepository extends JpaRepository<Applicant, Integer>{
 	
 	
 	@Query(value="select * from Applicant where status=?1",nativeQuery = true)
-	List<Applicant> viewAllApplicantByCourse(AdmissionStatus status);
+	List<Applicant> viewAllApplicantByCourse(int status);
 	
 	
 

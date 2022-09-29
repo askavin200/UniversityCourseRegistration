@@ -62,8 +62,8 @@ public class ApplicantController {
 		return new ResponseEntity<>(temp.get(),HttpStatus.OK);
 	}
 	
-	@GetMapping("/getAll")
-	public ResponseEntity<List<Applicant>> getAllApplicants(@RequestBody AdmissionStatus status){
+	@GetMapping("/getAll/{status}")
+	public ResponseEntity<List<Applicant>> getAllApplicants(@PathVariable int status){
 		
 		List<Applicant> res= service.viewAllApplicantsByStatus(status);
 		return new ResponseEntity<>(res,HttpStatus.OK);

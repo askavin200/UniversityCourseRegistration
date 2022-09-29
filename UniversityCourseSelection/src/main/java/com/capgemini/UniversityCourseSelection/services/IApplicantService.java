@@ -12,6 +12,6 @@ public interface IApplicantService {
  	Applicant updateApplicant(Applicant app);
  	Applicant deleteApplicant(Applicant app);
  	Optional<Applicant> viewApplicant(int id);
- 	List<Applicant> viewAllApplicantsByStatus(AdmissionStatus status);
+ 	List<Applicant> viewAllApplicantsByStatus(int status);
 
 }
