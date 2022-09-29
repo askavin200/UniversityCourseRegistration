@@ -17,7 +17,7 @@ public class UniversityStaffServiceImpl implements IUniversityStaffService{
 	@Autowired
 	private IUniversityStaffMemberRepository staffRepo;
 	@Autowired
-	private CourseServiceImpl courseService;
+	private ICourseService courseService;
 	
 	@Override
 	public UniversityStaffMember addStaff(UniversityStaffMember usm) {
