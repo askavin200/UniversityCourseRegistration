@@ -11,6 +11,7 @@ import com.capgemini.UniversityCourseSelection.entities.AdmissionCommiteeMember;
 import com.capgemini.UniversityCourseSelection.entities.AdmissionStatus;
 import com.capgemini.UniversityCourseSelection.entities.Applicant;
 import com.capgemini.UniversityCourseSelection.entities.Course;
+import com.capgemini.UniversityCourseSelection.exception.NotFoundException;
 import com.capgemini.UniversityCourseSelection.repo.IAdmissionCommiteeMemberRepository;
 import com.capgemini.UniversityCourseSelection.repo.IApplicantRepository;
 
@@ -30,18 +31,29 @@ public class AdmissionCommitteeMemberServiceImpl implements IAdmissionCommiteeMe
 
 	@Override
 	public AdmissionCommiteeMember updateCommitteeMember(AdmissionCommiteeMember member) {
-		return repo.save(member);
+		if (repo.existsById(member.getAdminId())) {
+			return repo.save(member);
+		} else {
+			throw new NotFoundException("AdmissionCommitteeMember not available");
+		}
 	}
 
 	@Override
 	public AdmissionCommiteeMember viewCommitteeMember(int id) {
-		AdmissionCommiteeMember member = repo.findById(id).get();
-		return member;
+		if (repo.existsById(id)) {
+			return repo.findById(id).get();
+		} else {
+			throw new NotFoundException("AdmissionCommittee Member not found !");
+		}
 	}
 
 	@Override
 	public void removeCommitteeMember(int id) {
-		repo.deleteById(id);
+		if (repo.existsById(id)) {
+			repo.deleteById(id);
+		} else {
+			throw new NotFoundException("No member exists with id:" + id);
+		}
 	}
 
 	@Override
@@ -70,28 +82,25 @@ public class AdmissionCommitteeMemberServiceImpl implements IAdmissionCommiteeMe
 		if (admissionDate.isAfter(courseStartDate)) {
 			applicant.setStatus(AdmissionStatus.REJECTED);
 		}
-		
+
 		// criteria 1 satisfied
 
 		// criteria 2 ( percentage )
 
 		double courseCriteria = course.getCourseCriteria();
 
-
 		double marks = applicant.getApplicantGraduationPercentage();
 
 		if (marks < courseCriteria) {
 			applicant.setStatus(AdmissionStatus.PENDING);
-		}
-		else
-		{
+		} else {
 			applicant.setStatus(AdmissionStatus.CONFIRMED);
 		}
 
 		// criteria 2 satisfied
 		applicantRepo.save(applicant);
 		return applicant.getStatus();
-		
+
 	}
 
 }
