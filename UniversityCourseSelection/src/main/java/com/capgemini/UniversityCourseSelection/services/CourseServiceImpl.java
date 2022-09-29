@@ -3,15 +3,14 @@ package com.capgemini.UniversityCourseSelection.services;
 import java.util.List;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.capgemini.UniversityCourseSelection.entities.Course;
+import com.capgemini.UniversityCourseSelection.exception.NotFoundException;
 import com.capgemini.UniversityCourseSelection.repo.ICourseRepository;
 
 
-//@Service
-//@Component
+@Service
 public class CourseServiceImpl implements ICourseService{
 	
 	@Autowired
@@ -32,28 +31,34 @@ public class CourseServiceImpl implements ICourseService{
 			courseRepo.deleteById(courseId);
 			return deletedCourse;
 		}
-			
-		return deletedCourse;
+		else {
+			throw new NotFoundException("Course with id: "+courseId+" not found!");
+		}
+		
 	}
+
 
 	@Override
 	public Course updateCourse(Course course) {
-		Course updatedCourse = null;
-		if(courseRepo.existsById(course.getCourseId())) 
-			updatedCourse = courseRepo.save(course);
 		
-		return updatedCourse;
+		if(courseRepo.existsById(course.getCourseId())) {
+			return courseRepo.save(course);
+		}
+			
+		else {
+			throw new NotFoundException("Course with id: "+course.getCourseId()+" not found!");
+		}
 	}
 
 	@Override
 	public Course viewCourse(int courseId) {
-		Course course = null;
-		try {
-			course = courseRepo.findById(courseId).get();
-		} catch (Exception e) {
-		}
 		
-		return course;
+		if(courseRepo.existsById(courseId)) {
+			return courseRepo.findById(courseId).get();
+		}
+		else {
+			throw new NotFoundException("Course with id: "+courseId+" not found!");
+		}
 	}
 
 	@Override
