@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.capgemini.UniversityCourseSelection.entities.Course;
 import com.capgemini.UniversityCourseSelection.entities.UniversityStaffMember;
+import com.capgemini.UniversityCourseSelection.exception.NotFoundException;
 import com.capgemini.UniversityCourseSelection.services.ICourseService;
 import com.capgemini.UniversityCourseSelection.services.IUniversityStaffService;
 
@@ -30,12 +31,18 @@ public class StaffController {
 	
 	@PostMapping("/add")
 	public ResponseEntity<UniversityStaffMember> addStaff(@RequestBody UniversityStaffMember staff) {
+		if(staff == null || staff.getStaffId() == null) {
+			throw new NotFoundException("Staff record or ID cannot be null!");
+		}
 		UniversityStaffMember ref = staffService.addStaff(staff);
 		return new ResponseEntity<>(ref,HttpStatus.OK);
 	}
 	
 	@PutMapping("/update")
 	public ResponseEntity<UniversityStaffMember> updateStaff(@RequestBody UniversityStaffMember staff) {
+		if(staff == null || staff.getStaffId() == null) {
+			throw new NotFoundException("Staff record or ID cannot be null!");
+		}
 		UniversityStaffMember ref = staffService.updateStaff(staff);
 		return new ResponseEntity<>(ref, HttpStatus.OK);
 	}
@@ -53,22 +60,23 @@ public class StaffController {
 	}
 	
 	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<String> removeStaff(@PathVariable int id) {
-		try {
+	public void removeStaff(@PathVariable int id) {
 			staffService.removeStaff(id);
-		} catch (Exception e) {
-			return new ResponseEntity<>("Staff id:"+id+" not found!", HttpStatus.OK);
-		}
-		return new ResponseEntity<>("Staff id:\"+id+\" deleted successfully!", HttpStatus.OK);
 	}
 	
 	@PostMapping("/course/add")
 	public ResponseEntity<Course> addCourse(@RequestBody Course course) {
+		if(course == null || course.getCourseId() == null) {
+			throw new NotFoundException("Course record or ID cannot be null!");
+		}
 		return new ResponseEntity<>(courseService.addCourse(course),HttpStatus.OK);
 	}
 	
 	@PutMapping("/course/update")
 	public ResponseEntity<Course> updateCourse(@RequestBody Course course) {
+		if(course == null || course.getCourseId() == null) {
+			throw new NotFoundException("Course record or ID cannot be null!");
+		}
 		return new ResponseEntity<>(courseService.updateCourse(course),HttpStatus.OK);
 	}
 	
