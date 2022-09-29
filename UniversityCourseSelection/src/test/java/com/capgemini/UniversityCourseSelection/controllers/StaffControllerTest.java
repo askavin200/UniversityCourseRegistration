@@ -1,28 +1,25 @@
 package com.capgemini.UniversityCourseSelection.controllers;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.capgemini.UniversityCourseSelection.entities.Course;
 import com.capgemini.UniversityCourseSelection.entities.UniversityStaffMember;
 import com.capgemini.UniversityCourseSelection.exception.NotFoundException;
-import com.capgemini.UniversityCourseSelection.services.UniversityStaffServiceImpl;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.capgemini.UniversityCourseSelection.services.ICourseService;
+import com.capgemini.UniversityCourseSelection.services.IUniversityStaffService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
 import java.util.Arrays;
 
-import org.hamcrest.collection.IsEmptyCollection;
-import org.hibernate.hql.internal.ast.tree.IsNotNullLogicOperatorNode;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,7 +30,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -46,7 +42,10 @@ class StaffControllerTest {
 	ObjectWriter objectWriter = objectMapper.writer();
 	
 	@Mock
-	private UniversityStaffServiceImpl staffService;
+	private IUniversityStaffService staffService;
+	
+	@Mock
+	private ICourseService courseService;
 	
 	@InjectMocks
 	private StaffController staffController;
@@ -59,6 +58,8 @@ class StaffControllerTest {
 	UniversityStaffMember STAFF_1 = new UniversityStaffMember(1,"password1","role1");
 	UniversityStaffMember STAFF_2 = new UniversityStaffMember(2,"password2","role2");
 	UniversityStaffMember STAFF_3 = new UniversityStaffMember(3,"password3","role3");
+	
+	Course COURSE_1 = new Course(1,"Java Programming","2 months",LocalDate.of(2022,3,10),LocalDate.of(2022,5,10),"700",96.5);
 	
 	@Test
 	void addStaff_success() throws Exception {
@@ -184,11 +185,101 @@ class StaffControllerTest {
 	
 	@Test
 	void removeStaff_DoesNotExist() throws Exception {		
+		Mockito.doThrow(new NotFoundException("Staff with id: 3 not found!")).when(staffService).removeStaff(3);
+		
 		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.delete("/uni/staff/delete/3")
 				.contentType(MediaType.APPLICATION_JSON);
 		
-		assertThatThrownBy(()-> mockMvc.perform(mockRequest))
-		.hasRootCause(new NotFoundException("Staff with id: 3 not found!"));
+		assertThatThrownBy(()-> mockMvc.perform(mockRequest)).hasRootCauseInstanceOf(NotFoundException.class);
+	}
+	
+	@Test
+	void addCourse_success() throws Exception{
+		Mockito.when(courseService.addCourse(COURSE_1)).thenReturn(COURSE_1);
+		
+		String body = objectWriter.writeValueAsString(COURSE_1);
+		
+		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/uni/staff/course/add")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.content(body);
+		
+		mockMvc.perform(mockRequest)
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$", notNullValue()))
+		.andExpect(jsonPath("$.courseName", is(COURSE_1.getCourseName())))
+		.andExpect(jsonPath("$.courseId", is(COURSE_1.getCourseId())));
+		
+	}
+	
+	@Test
+	void updateCourse_success() throws Exception {
+		Course updatedCourse = new Course(1,"Python Programming","2 months",LocalDate.of(2022,3,10),LocalDate.of(2022,5,10),"700",96.5);
+		
+		Mockito.when(courseService.updateCourse(updatedCourse)).thenReturn(updatedCourse);
+		
+		String updatedBody = objectWriter.writeValueAsString(updatedCourse);
+		
+		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.put("/uni/staff/course/update")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(updatedBody)
+				.accept(MediaType.APPLICATION_JSON);
+		
+		mockMvc.perform(mockRequest)
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$", notNullValue()))
+		.andExpect(jsonPath("$.courseName", is("Python Programming")));
+	}
+	
+	@Test
+	void updateCourse_failWhenNotFound() throws Exception {
+		Course updatedCourse = new Course(1,"Python Programming","2 months",LocalDate.of(2022,3,10),LocalDate.of(2022,5,10),"700",96.5);
+		
+		Mockito.when(courseService.updateCourse(updatedCourse)).thenThrow(new NotFoundException());
+		
+		String updatedBody = objectWriter.writeValueAsString(updatedCourse);
+		
+		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.put("/uni/staff/course/update")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(updatedBody)
+				.accept(MediaType.APPLICATION_JSON);
+		
+		assertThatThrownBy(()->{mockMvc.perform(mockRequest);}).hasRootCauseInstanceOf(NotFoundException.class);
+	}
+	
+	@Test
+	void deleteCourse_success() throws Exception {
+		Course deletedCourse = new Course(1,"Python Programming","2 months",LocalDate.of(2022,3,10),LocalDate.of(2022,5,10),"700",96.5);
+		
+		Mockito.when(courseService.removeCourse(deletedCourse.getCourseId())).thenReturn(deletedCourse);
+		
+		String updatedBody = objectWriter.writeValueAsString(deletedCourse);
+		
+		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.delete("/uni/staff/course/delete/1")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(updatedBody)
+				.accept(MediaType.APPLICATION_JSON);
+		
+		mockMvc.perform(mockRequest)
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$", notNullValue()))
+		.andExpect(jsonPath("$.courseName", is("Python Programming")));
+	}
+	
+	@Test
+	void deleteCourse_failWhenNotFound() throws Exception {
+		Course deletedCourse = new Course(1,"Python Programming","2 months",LocalDate.of(2022,3,10),LocalDate.of(2022,5,10),"700",96.5);
+		
+		Mockito.when(courseService.removeCourse(deletedCourse.getCourseId())).thenThrow(new NotFoundException());
+		
+		String updatedBody = objectWriter.writeValueAsString(deletedCourse);
+		
+		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.delete("/uni/staff/course/delete/1")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(updatedBody)
+				.accept(MediaType.APPLICATION_JSON);
+		
+		assertThatThrownBy(()->{mockMvc.perform(mockRequest);}).hasRootCauseInstanceOf(NotFoundException.class);
 	}
 
 }

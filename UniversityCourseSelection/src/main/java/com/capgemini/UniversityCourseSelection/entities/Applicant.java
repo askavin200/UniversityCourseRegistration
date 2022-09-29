@@ -19,14 +19,13 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Applicant {
-	
+
 	@Override
 	public String toString() {
 		return "Applicant [applicantId=" + applicantId + ", applicantName=" + applicantName + ", mobileNumber="
 				+ mobileNumber + ", applicantDegree=" + applicantDegree + ", applicantGraduationPercentage="
 				+ applicantGraduationPercentage + ", status=" + status + ", admission=" + admission + "]";
 	}
-
 
 	public Applicant(Integer applicantId, String applicantName, long mobileNumber, String applicantDegree,
 			double applicantGraduationPercentage, String password, Admission admission) {
@@ -40,44 +39,38 @@ public class Applicant {
 		this.admission = admission;
 	}
 
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer applicantId;
-	
-	
+
 	@Column(name = "name")
 	private String applicantName;
-	
-	@Column(name="mobile_number")
+
+	@Column(name = "mobile_number")
 	private long mobileNumber;
-	
-	@Column(name="Degree")
+
+	@Column(name = "Degree")
 	private String applicantDegree;
-	
-	@Column(name="grad_percentage")
+
+	@Column(name = "grad_percentage")
 	private double applicantGraduationPercentage;
-	
-	
-			@JsonIgnore
-			@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-	private String password; //added field
-	
+
+
+		
+	private String password; // added field
+
 	private AdmissionStatus status;
-	
+
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "admission_id", referencedColumnName = "admission_id")
 	private Admission admission;
-	
-	
+
 	public Applicant() {
 		super();
-		status= AdmissionStatus.APPLIED;
+		status = AdmissionStatus.APPLIED;
 	}
-	
-	
+
 	// this is a comment to check integration
-	
 
 }
