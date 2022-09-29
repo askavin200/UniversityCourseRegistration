@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.capgemini.UniversityCourseSelection.entities.Course;
 import com.capgemini.UniversityCourseSelection.entities.UniversityStaffMember;
+import com.capgemini.UniversityCourseSelection.exception.NotFoundException;
 import com.capgemini.UniversityCourseSelection.repo.ICourseRepository;
 import com.capgemini.UniversityCourseSelection.repo.IUniversityStaffMemberRepository;
 
@@ -16,7 +17,7 @@ public class UniversityStaffServiceImpl implements IUniversityStaffService{
 	@Autowired
 	private IUniversityStaffMemberRepository staffRepo;
 	@Autowired
-	private ICourseRepository courseRepo;
+	private CourseServiceImpl courseService;
 	
 	@Override
 	public UniversityStaffMember addStaff(UniversityStaffMember usm) {
@@ -28,17 +29,29 @@ public class UniversityStaffServiceImpl implements IUniversityStaffService{
 		if(staffRepo.existsById(usm.getStaffId())) {
 			return staffRepo.save(usm);
 		}
-		return null;
+		else {
+			throw new NotFoundException("Staff with id: "+usm.getStaffId()+" not found!");
+		}
 	}
 
 	@Override
 	public UniversityStaffMember viewStaff(int id) {
-		return staffRepo.getReferenceById(null);
+		if(staffRepo.existsById(id)) {
+			return staffRepo.getReferenceById(id);
+		}
+		else {
+			throw new NotFoundException("Staff with id: "+id+" not found!");
+		}
 	}
 
 	@Override
 	public void removeStaff(int id) {
-		staffRepo.deleteById(id);		
+		if(staffRepo.existsById(id)) {
+			staffRepo.deleteById(id);
+		}
+		else {
+			throw new NotFoundException("Staff with id: "+id+" not found!");
+		}	
 	}
 
 	@Override
@@ -48,24 +61,17 @@ public class UniversityStaffServiceImpl implements IUniversityStaffService{
 
 	@Override
 	public Course addCourse(Course course) {
-		return courseRepo.save(course);
+		return courseService.addCourse(course);
 	}
 
 	@Override
 	public Course removeCourse(Course course) {
-		if(courseRepo.existsById(course.getCourseId())) {
-			courseRepo.deleteById(course.getCourseId());
-			return course;
-		}
-		return null;
+		return courseService.removeCourse(course.getCourseId());
 	}
 
 	@Override
 	public Course updateCourse(Course course) {
-		if(courseRepo.existsById(course.getCourseId())) {
-			return courseRepo.save(course);
-		}
-		return null;
+		return courseService.updateCourse(course);
 	}
   
 }

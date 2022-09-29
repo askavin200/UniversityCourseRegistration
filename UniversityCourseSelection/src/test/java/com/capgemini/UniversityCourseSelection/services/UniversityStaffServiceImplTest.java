@@ -1,23 +1,22 @@
 package com.capgemini.UniversityCourseSelection.services;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
 
+import com.capgemini.UniversityCourseSelection.entities.Course;
 import com.capgemini.UniversityCourseSelection.entities.UniversityStaffMember;
+import com.capgemini.UniversityCourseSelection.exception.NotFoundException;
 import com.capgemini.UniversityCourseSelection.repo.IUniversityStaffMemberRepository;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
@@ -25,6 +24,7 @@ class UniversityStaffServiceImplTest {
 	
 	@Mock
 	private IUniversityStaffMemberRepository staffRepo;
+//	private ICourseServiceImpl courseService;
 	@InjectMocks
 	private UniversityStaffServiceImpl staffService;
 	
@@ -32,23 +32,20 @@ class UniversityStaffServiceImplTest {
 	UniversityStaffMember STAFF_2 = new UniversityStaffMember(2,"password2","role2");
 	UniversityStaffMember STAFF_3 = new UniversityStaffMember(3,"password3","role3");
 	
-//	@BeforeEach
-//	void initMethod() {
-//		MockitoAnnotations.initMocks(this);
-//	}
+	Course COURSE_1 = new Course(1,"Java Programming","2 months",LocalDate.of(2022, 6, 25),LocalDate.of(2022, 8, 25),"700",96.5);
 	
-//	@Test
-//	void testAddStaff_success() {
-//		UniversityStaffMember newStaff = new UniversityStaffMember(4,"password4","role4");
-//		Mockito.when(staffRepo.save(newStaff)).thenReturn(newStaff);
-////		assertEquals(4,staffService.addStaff(newStaff).getStaffId());
-////		assertEquals("password4",staffService.addStaff(newStaff).getPassword());
-////		assertEquals("role4",staffService.addStaff(newStaff).getRole());
-//		assertEquals(newStaff, staffService.addStaff(newStaff));
-//	}
+	@Test
+	void addStaff_success() {
+		UniversityStaffMember newStaff = new UniversityStaffMember(4,"password4","role4");
+		Mockito.when(staffRepo.save(newStaff)).thenReturn(newStaff);
+		assertEquals(4,staffService.addStaff(newStaff).getStaffId());
+		assertEquals("password4",staffService.addStaff(newStaff).getPassword());
+		assertEquals("role4",staffService.addStaff(newStaff).getRole());
+		assertEquals(newStaff, staffService.addStaff(newStaff));
+	}
 
 	@Test
-	void testUpdateStaff_success() {
+	void updateStaff_success() {
 		UniversityStaffMember updateStaff = new UniversityStaffMember(1,"new_pwd","new_role");
 		Mockito.when(staffRepo.existsById(updateStaff.getStaffId())).thenReturn(true);
 		Mockito.when(staffRepo.save(updateStaff)).thenReturn(updateStaff);
@@ -56,30 +53,79 @@ class UniversityStaffServiceImplTest {
 	}
 
 	@Test
-	void testViewStaff_success() {
-		Mockito.when(staffRepo.getReferenceById(STAFF_1.getStaffId())).thenReturn(STAFF_1);
+	void viewStaff_success() {
+	Mockito.when(staffRepo.existsById(STAFF_1.getStaffId())).thenReturn(true);	
+	Mockito.when(staffRepo.getReferenceById(STAFF_1.getStaffId())).thenReturn(STAFF_1);
 		assertNotNull(staffService.viewStaff(1));
+		assertEquals(STAFF_1, staffService.viewStaff(1));
 	}
 
 	@Test
-	void testRemoveStaff_success() {
-		Mockito.when(staffRepo.existsById(1)).thenReturn(true);
+	void removeStaff_success() {
+		Mockito.when(staffRepo.existsById(STAFF_1.getStaffId())).thenReturn(false);
 		boolean success = true;
 		try {
 			staffService.removeStaff(1);
 		} catch (Exception e) {
 			success = false;
 		}
-		assertEquals(true, success);
+		assertEquals(false, success);
 	}
 
 	@Test
-	void testViewAllStaffs_success() {
+	void viewAllStaffs_success() {
 		List<UniversityStaffMember> allStaff = new ArrayList<>(Arrays.asList(STAFF_1,STAFF_2,STAFF_3));
 		Mockito.when(staffRepo.findAll()).thenReturn(allStaff);
 		assertEquals(3, staffService.viewAllStaffs().size());
 		assertEquals("password2", staffService.viewAllStaffs().get(1).getPassword());
 		assertEquals("role3", staffService.viewAllStaffs().get(2).getRole());
 	}
+	
+//	@Test
+//	void addCourse_success() {
+//		Mockito.when(courseService.addCourse(COURSE_1)).thenReturn(COURSE_1);
+//		assertEquals(COURSE_1,staffService.addCourse(COURSE_1));
+//	}
+//	
+//	@Test
+//	void updateCourse_success() {
+//		Course updateCourse = new Course(1,"Python Programming","2 months",LocalDate.of(2022, 6, 25),LocalDate.of(2022, 8, 25),"700",96.5);
+//		Mockito.when(courseService.updateCourse(updateCourse)).thenReturn(updateCourse);
+//		assertEquals(updateCourse,staffService.addCourse(updateCourse));
+//	}
+//	
+//	@Test
+//	void removeCourse_success() {
+//		Mockito.when(courseService.removeCourse(COURSE_1.getCourseId())).thenReturn(COURSE_1);
+//		assertEquals(COURSE_1,staffService.addCourse(COURSE_1));
+//	}
+		
+	@Test
+	void updateStaff_failWhenNotFound() {
+		UniversityStaffMember newStaff = STAFF_3;
+		Mockito.when(staffRepo.existsById(newStaff.getStaffId())).thenReturn(false);
+		assertThrows(NotFoundException.class, ()->{staffService.updateStaff(newStaff);});
+	}
+	
+	@Test
+	void viewStaff_failWhenNotFound() {
+		Mockito.when(staffRepo.existsById(3)).thenReturn(false);
+		assertThrows(NotFoundException.class, ()->{staffService.viewStaff(3);});
+	}
+	
+	@Test
+	void removeStaff_failWhenNotFound() {
+		Mockito.when(staffRepo.existsById(3)).thenReturn(false);
+		assertThrows(NotFoundException.class, ()->{staffService.removeStaff(3);});
+	}
+	
+	@Test
+	void viewAllStaffs_failWhenNoRecords() {
+		List<UniversityStaffMember> res = new ArrayList<>();
+		Mockito.when(staffRepo.findAll()).thenReturn(res);
+		assertEquals(true, staffService.viewAllStaffs().isEmpty());
+	}
+	
 
+	
 }
