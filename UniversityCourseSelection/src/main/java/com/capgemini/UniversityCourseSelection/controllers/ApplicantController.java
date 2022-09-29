@@ -1,7 +1,8 @@
 package com.capgemini.UniversityCourseSelection.controllers;
 
-import com.capgemini.UniversityCourseSelection.entities.AdmissionStatus;
+
 import com.capgemini.UniversityCourseSelection.entities.Applicant;
+import com.capgemini.UniversityCourseSelection.repo.ILoginRepository;
 import com.capgemini.UniversityCourseSelection.services.IApplicantService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -25,6 +28,9 @@ public class ApplicantController {
 
 	@Autowired
 	private IApplicantService service;
+//	
+//	@Autowired
+//	private ILoginRepository repo;
 
 	@PostMapping("/apply")
 	public ResponseEntity<Applicant> applyForCourse(@RequestBody Applicant applicant) {
@@ -69,4 +75,13 @@ public class ApplicantController {
 		return new ResponseEntity<>(res,HttpStatus.OK);
 		
 	}
+	
+//	@PostMapping("/loginTest")
+//	@ResponseBody
+//	public ResponseEntity<String> loginTest(@RequestParam Integer id, @RequestParam String password){
+//		if(repo.verifyApplicantCredentials(id, password)) {
+//			return new ResponseEntity<String>("You are logged in",HttpStatus.OK);
+//		}
+//		return new ResponseEntity<>("Enter valid credentials please",HttpStatus.FORBIDDEN);
+//	}
 }

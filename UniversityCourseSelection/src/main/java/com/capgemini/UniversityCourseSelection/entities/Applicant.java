@@ -8,6 +8,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +20,14 @@ import lombok.Setter;
 @Setter
 public class Applicant {
 	
+	@Override
+	public String toString() {
+		return "Applicant [applicantId=" + applicantId + ", applicantName=" + applicantName + ", mobileNumber="
+				+ mobileNumber + ", applicantDegree=" + applicantDegree + ", applicantGraduationPercentage="
+				+ applicantGraduationPercentage + ", status=" + status + ", admission=" + admission + "]";
+	}
+
+
 	public Applicant(Integer applicantId, String applicantName, long mobileNumber, String applicantDegree,
 			double applicantGraduationPercentage, String password, Admission admission) {
 		super();
@@ -47,6 +59,9 @@ public class Applicant {
 	@Column(name="grad_percentage")
 	private double applicantGraduationPercentage;
 	
+	
+			@JsonIgnore
+			@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	private String password; //added field
 	
 	private AdmissionStatus status;

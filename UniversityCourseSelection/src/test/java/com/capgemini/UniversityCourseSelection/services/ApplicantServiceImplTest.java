@@ -8,6 +8,7 @@ import java.util.Optional;
 import com.capgemini.UniversityCourseSelection.entities.Admission;
 import com.capgemini.UniversityCourseSelection.entities.AdmissionStatus;
 import com.capgemini.UniversityCourseSelection.entities.Applicant;
+import com.capgemini.UniversityCourseSelection.exception.NotFoundException;
 import com.capgemini.UniversityCourseSelection.repo.IApplicantRepository;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -56,13 +57,14 @@ class ApplicantServiceImplTest {
 
 	@Test
 	void testUpdateApplicant_success() {
+		Mockito.when(apprepo.existsById(2)).thenReturn(true);
 		Mockito.when(apprepo.save(app2)).thenReturn(app2);
 		assertEquals(app2, appservice.updateApplicant(app2));
 	}
 
 	@Test
 	void testDeleteApplicant_success() {
-//		Mockito.when(apprepo.existsById(1)).thenReturn(true);
+		Mockito.when(apprepo.existsById(1)).thenReturn(true);
 		boolean success = true;
 		try {
 			appservice.deleteApplicant(app1);
@@ -74,6 +76,7 @@ class ApplicantServiceImplTest {
 
 	@Test
 	void testViewApplicant_success() {
+		Mockito.when(apprepo.existsById(1)).thenReturn(true);
 		Mockito.when(apprepo.findById(1)).thenReturn(Optional.ofNullable(app1));
 		assertTrue(appservice.viewApplicant(1).isPresent());
 
@@ -87,11 +90,11 @@ class ApplicantServiceImplTest {
 		List<Applicant> confirmed = new ArrayList<>();
 		confirmed.add(app3);
 
-		Mockito.when(apprepo.viewAllApplicantByCourse(AdmissionStatus.APPLIED)).thenReturn(applied);
-		Mockito.when(apprepo.viewAllApplicantByCourse(AdmissionStatus.CONFIRMED)).thenReturn(confirmed);
+		Mockito.when(apprepo.viewAllApplicantByCourse(0)).thenReturn(applied);
+		Mockito.when(apprepo.viewAllApplicantByCourse(1)).thenReturn(confirmed);
 
-		assertEquals(applied, appservice.viewAllApplicantsByStatus(AdmissionStatus.APPLIED));
-		assertEquals(confirmed, appservice.viewAllApplicantsByStatus(AdmissionStatus.CONFIRMED));
+		assertEquals(applied, appservice.viewAllApplicantsByStatus(0));
+		assertEquals(confirmed, appservice.viewAllApplicantsByStatus(1));
 	}
 
 	@Test
@@ -113,17 +116,26 @@ class ApplicantServiceImplTest {
 	}
 	
 	@Test
+	void testDeleteApplicant_failure() {
+		Applicant app4=new Applicant();
+		app4.setApplicantId(4);
+		Mockito.when(apprepo.existsById(4)).thenReturn(false);
+		assertThrows(NotFoundException.class,()->appservice.deleteApplicant(app4));
+	}
+	
+	@Test
 	void testViewApplicant_failure() {
-		Applicant app4=null;
-		Mockito.when(apprepo.findById(4)).thenReturn(Optional.ofNullable(app4));
-		assertTrue(appservice.viewApplicant(4).isEmpty());
+//		Applicant app4=null;
+//		Mockito.when(apprepo.findById(4)).thenReturn(Optional.ofNullable(app4));
+		Mockito.when(apprepo.existsById(4)).thenReturn(false);
+		assertThrows(NotFoundException.class,()->appservice.viewApplicant(4));
 	}
 	
 	@Test
 	void testViewAllApplicantsByStatus_failure() {
 		List<Applicant> list=null;
-		Mockito.when(apprepo.viewAllApplicantByCourse(AdmissionStatus.REJECTED)).thenReturn(list);
-		assertEquals(list, appservice.viewAllApplicantsByStatus(AdmissionStatus.REJECTED));
+		Mockito.when(apprepo.viewAllApplicantByCourse(3)).thenReturn(list);
+		assertEquals(list, appservice.viewAllApplicantsByStatus(3));
 	}
 
 }
