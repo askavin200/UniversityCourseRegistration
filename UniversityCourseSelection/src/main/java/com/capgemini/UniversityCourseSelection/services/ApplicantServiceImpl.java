@@ -42,7 +42,7 @@ public class ApplicantServiceImpl implements IApplicantService {
 
 	@Override
 	public Optional<Applicant> viewApplicant(int id) {
-		if(!repo.existsById(id)
+		if(!repo.existsById(id))
 			throw new NotFoundException("Applicant does'nt exist!");
 	   Optional<Applicant> res= repo.findById(id);
 	   return res;
