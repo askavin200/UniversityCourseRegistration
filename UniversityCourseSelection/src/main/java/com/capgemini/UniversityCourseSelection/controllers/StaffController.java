@@ -66,7 +66,7 @@ public class StaffController {
 	
 	@PostMapping("/course/add")
 	public ResponseEntity<Course> addCourse(@RequestBody Course course) {
-		if(course == null || course.getCourseId() == null) {
+		if(course == null) {
 			throw new NotFoundException("Course record or ID cannot be null!");
 		}
 		return new ResponseEntity<>(courseService.addCourse(course),HttpStatus.OK);
@@ -74,7 +74,7 @@ public class StaffController {
 	
 	@PutMapping("/course/update")
 	public ResponseEntity<Course> updateCourse(@RequestBody Course course) {
-		if(course == null || course.getCourseId() == null) {
+		if(course == null) {
 			throw new NotFoundException("Course record or ID cannot be null!");
 		}
 		return new ResponseEntity<>(courseService.updateCourse(course),HttpStatus.OK);
