@@ -30,7 +30,7 @@ public class AdmissionCommitteMemberController {
 	public ResponseEntity<AdmissionCommiteeMember> addAddmissionCommitteeMember(
 			@RequestBody AdmissionCommiteeMember member) {
 		AdmissionCommiteeMember mem = null;
-		member = committeService.addCommitteeMember(member);
+		mem = committeService.addCommitteeMember(member);
 		return new ResponseEntity<>(mem, null, HttpStatus.OK);
 	}
 
@@ -48,8 +48,8 @@ public class AdmissionCommitteMemberController {
 		return new ResponseEntity<>(member, null, HttpStatus.OK);
 	}
 
-	@DeleteMapping("/delete")
-	public ResponseEntity<String> deleteCommitteeMember(int id) {
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<String> deleteCommitteeMember(@PathVariable int id) {
 		try {
 			committeService.removeCommitteeMember(id);
 		} catch (Exception e) {

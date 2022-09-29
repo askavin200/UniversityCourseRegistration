@@ -1,10 +1,11 @@
-package com.capgemini.UniversityCourseSelection.services;
+	package com.capgemini.UniversityCourseSelection.services;
 
 import java.util.List;
 import java.util.Optional;
 
 import com.capgemini.UniversityCourseSelection.entities.AdmissionStatus;
 import com.capgemini.UniversityCourseSelection.entities.Applicant;
+import com.capgemini.UniversityCourseSelection.exception.NotFoundException;
 import com.capgemini.UniversityCourseSelection.repo.IApplicantRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,17 +27,23 @@ public class ApplicantServiceImpl implements IApplicantService {
 
 	@Override
 	public Applicant updateApplicant(Applicant app) {
+		if(app==null ||!repo.existsById(app.getApplicantId()))
+			throw new NotFoundException("Applicant does'nt exist!");
 		return repo.save(app);
 	}
 
 	@Override
 	public Applicant deleteApplicant(Applicant app) {
+		if(app==null ||!repo.existsById(app.getApplicantId()))
+			throw new NotFoundException("Applicant does'nt exist!");
 		repo.delete(app);
 		return app;
 	}
 
 	@Override
 	public Optional<Applicant> viewApplicant(int id) {
+		if(!repo.existsById(id)
+			throw new NotFoundException("Applicant does'nt exist!");
 	   Optional<Applicant> res= repo.findById(id);
 	   return res;
 	}

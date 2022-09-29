@@ -87,11 +87,11 @@ class ApplicantServiceImplTest {
 		List<Applicant> confirmed = new ArrayList<>();
 		confirmed.add(app3);
 
-		Mockito.when(apprepo.viewAllApplicantByCourse(AdmissionStatus.APPLIED)).thenReturn(applied);
-		Mockito.when(apprepo.viewAllApplicantByCourse(AdmissionStatus.CONFIRMED)).thenReturn(confirmed);
+		Mockito.when(apprepo.viewAllApplicantByCourse(0)).thenReturn(applied);
+		Mockito.when(apprepo.viewAllApplicantByCourse(1)).thenReturn(confirmed);
 
-		assertEquals(applied, appservice.viewAllApplicantsByStatus(AdmissionStatus.APPLIED));
-		assertEquals(confirmed, appservice.viewAllApplicantsByStatus(AdmissionStatus.CONFIRMED));
+		assertEquals(applied, appservice.viewAllApplicantsByStatus(0));
+		assertEquals(confirmed, appservice.viewAllApplicantsByStatus(1));
 	}
 
 	@Test
@@ -122,8 +122,8 @@ class ApplicantServiceImplTest {
 	@Test
 	void testViewAllApplicantsByStatus_failure() {
 		List<Applicant> list=null;
-		Mockito.when(apprepo.viewAllApplicantByCourse(AdmissionStatus.REJECTED)).thenReturn(list);
-		assertEquals(list, appservice.viewAllApplicantsByStatus(AdmissionStatus.REJECTED));
+		Mockito.when(apprepo.viewAllApplicantByCourse(3)).thenReturn(list);
+		assertEquals(list, appservice.viewAllApplicantsByStatus(3));
 	}
 
 }

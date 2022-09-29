@@ -2,21 +2,24 @@ package com.capgemini.UniversityCourseSelection.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-
-
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import lombok.ToString;
+
 @Entity
+@ToString
 @Table(name = "admission_committee_member")
 public class AdmissionCommiteeMember {
 
-	
+	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "admin_id")
-	@Id
 	private int adminId;
 	
 	@Column(name = "admin_name")
@@ -28,6 +31,8 @@ public class AdmissionCommiteeMember {
 	@Column(name = "admin_username")
 	private String adminUsername;
 	
+	@JsonIgnore
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	@Column(name = "admin_password")
 	private String adminPassword;
 
@@ -72,6 +77,16 @@ public class AdmissionCommiteeMember {
 	}
 
 	public void setAdminPassword(String adminPassword) {
+		this.adminPassword = adminPassword;
+	}
+
+	public AdmissionCommiteeMember(int adminId, String adminName, String adminContact, String adminUsername,
+			String adminPassword) {
+		super();
+		this.adminId = adminId;
+		this.adminName = adminName;
+		this.adminContact = adminContact;
+		this.adminUsername = adminUsername;
 		this.adminPassword = adminPassword;
 	}
 
