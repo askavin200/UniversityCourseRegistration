@@ -83,10 +83,10 @@ public class ApplicantController {
 
 	}
 
-	@GetMapping("/get")
-	public ResponseEntity<Applicant> getById(HttpServletRequest request) {
+	@GetMapping("/get/{id}")
+	public ResponseEntity<Applicant> getById(@PathVariable int id, HttpServletRequest request) {
 		
-		boolean valid=checkSession(request,"applicant");
+		boolean valid=checkSession(request,"applicant")||checkSession(request,"commitee");
 		String host = String.valueOf(request.getServerPort());
 		if (!valid) {
 			throw new NotLoggedInException(
@@ -95,12 +95,16 @@ public class ApplicantController {
 
 		}
 		HttpSession session=request.getSession();
-		Integer id= (Integer)session.getAttribute("applicant");
+		
+		Integer attId= (Integer)session.getAttribute("applicant");
 
 		Optional<Applicant> temp = service.viewApplicant(id);
 		if (temp.isEmpty()) {
 			throw new NotFoundException("No user with given Id is present");
 
+		}
+		if((int)attId!=id) {
+		    temp.get().setPassword("*******");
 		}
 		return new ResponseEntity<>(temp.get(), HttpStatus.OK);
 	}
