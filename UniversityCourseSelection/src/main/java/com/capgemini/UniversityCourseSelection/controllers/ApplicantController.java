@@ -2,6 +2,7 @@ package com.capgemini.UniversityCourseSelection.controllers;
 
 import com.capgemini.UniversityCourseSelection.entities.Applicant;
 import com.capgemini.UniversityCourseSelection.exception.NotFoundException;
+import com.capgemini.UniversityCourseSelection.exception.NotLoggedInException;
 import com.capgemini.UniversityCourseSelection.services.IApplicantService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,13 @@ public class ApplicantController {
 		return validLogin;
 	}
 
+	private String getHostPort(HttpServletRequest request) {
+		StringBuffer url = request.getRequestURL();
+		String uri = request.getRequestURI();
+		String hostPort = url.delete(url.indexOf(uri), url.length()).toString();
+		return hostPort;
+	}
+
 	@PostMapping("/apply")
 	public ResponseEntity<Applicant> applyForCourse(@RequestBody Applicant applicant) {
 
@@ -67,10 +75,11 @@ public class ApplicantController {
 	@DeleteMapping("/delete")
 	public ResponseEntity<Applicant> deleteApplication(@RequestBody Applicant applicant, HttpServletRequest request) {
 		boolean valid = checkSession(request, "commitee");
-
+		String host = getHostPort(request);
 		if (!valid) {
-			return new ResponseEntity("Please Login to Access <a href = 'localhost:8080/login/commitee'>Login</a> ",
-					HttpStatus.FORBIDDEN);
+			throw new NotLoggedInException(
+					"Accessible to commitee members only. If you are a registered commitee member, click " + host
+							+ "/login/commitee to login.");
 
 		}
 		if (applicant == null || applicant.getApplicantId() == null) {
@@ -86,7 +95,7 @@ public class ApplicantController {
 
 		Optional<Applicant> temp = service.viewApplicant(id);
 		if (temp.isEmpty()) {
-			return new ResponseEntity("No such user", HttpStatus.NOT_FOUND);
+			throw new NotFoundException("No user with given Id is present");
 
 		}
 		return new ResponseEntity<>(temp.get(), HttpStatus.OK);
@@ -95,10 +104,11 @@ public class ApplicantController {
 	@GetMapping("/getAll/{status}")
 	public ResponseEntity<List<Applicant>> getAllApplicants(@PathVariable int status, HttpServletRequest request) {
 		boolean valid = checkSession(request, "commitee");
-
+		String host = getHostPort(request);
 		if (!valid) {
-			return new ResponseEntity("Please Login to Access <a href = 'localhost:8080/login/commitee'>Login</a> ",
-					HttpStatus.FORBIDDEN);
+			throw new NotLoggedInException(
+					"Accessible to commitee members only. If you are a registered commitee member, click " + host
+							+ "/login/commitee to login.");
 
 		}
 
