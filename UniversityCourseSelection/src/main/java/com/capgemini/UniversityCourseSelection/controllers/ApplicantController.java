@@ -34,13 +34,14 @@ public class ApplicantController {
 		HttpSession session = request.getSession();
 
 		boolean validLogin = true;
-		if (session.isNew()) {
+		if (session.isNew())
+			return false;
+		if (session.getAttribute(type) == null)
+			return false;
+		int userId = (int) session.getAttribute(type);
+		if (userId == 0)
 			validLogin = false;
-		} else {
-			int userId = (int) session.getAttribute(type);
-			if (userId != 0)
-				validLogin = true;
-		}
+
 		return validLogin;
 	}
 
@@ -54,7 +55,10 @@ public class ApplicantController {
 	}
 
 	@PutMapping("/update")
-	public ResponseEntity<Applicant> updateApplication(@RequestBody Applicant applicant) {
+	public ResponseEntity<Applicant> updateApplication(@RequestBody Applicant applicant,HttpServletRequest request) {
+		
+		boolean valid=checkSession(request,"commitee");
+		
 		if (applicant == null || applicant.getApplicantId() == null) {
 			throw new NotFoundException("Applicant or Id can't be null!");
 		}
@@ -68,7 +72,7 @@ public class ApplicantController {
 	@DeleteMapping("/delete")
 	public ResponseEntity<Applicant> deleteApplication(@RequestBody Applicant applicant, HttpServletRequest request) {
 		boolean valid = checkSession(request, "commitee");
-		String host = String.valueOf(request.getServerPort());			
+		String host = String.valueOf(request.getServerPort());
 		if (!valid) {
 			throw new NotLoggedInException(
 					"Accessible to commitee members only. If you are a registered commitee member, click " + host
@@ -85,26 +89,29 @@ public class ApplicantController {
 
 	@GetMapping("/get/{id}")
 	public ResponseEntity<Applicant> getById(@PathVariable int id, HttpServletRequest request) {
-		
-		boolean valid=checkSession(request,"applicant")||checkSession(request,"commitee");
+
+		boolean valid = checkSession(request, "applicant") || checkSession(request, "commitee")
+				|| checkSession(request, "staffMember");
 		String host = String.valueOf(request.getServerPort());
 		if (!valid) {
 			throw new NotLoggedInException(
-					"Kindly login to view your details.  click " + host
-							+ "/login/applicant to login.");
+					"Kindly login to view your details.  click " + host + "/login/applicant to login.");
 
 		}
-		HttpSession session=request.getSession();
-		
-		Integer attId= (Integer)session.getAttribute("applicant");
+		HttpSession session = request.getSession();
 
 		Optional<Applicant> temp = service.viewApplicant(id);
 		if (temp.isEmpty()) {
 			throw new NotFoundException("No user with given Id is present");
 
 		}
-		if((int)attId!=id) {
-		    temp.get().setPassword("*******");
+		if (checkSession(request, "applicant")) {
+			int attId = (int) session.getAttribute("applicant");
+			if (attId != id) {
+				temp.get().setPassword("******");
+			}
+		} else {
+			temp.get().setPassword("******");
 		}
 		return new ResponseEntity<>(temp.get(), HttpStatus.OK);
 	}
@@ -122,7 +129,6 @@ public class ApplicantController {
 
 		List<Applicant> res = service.viewAllApplicantsByStatus(status);
 		return new ResponseEntity<>(res, HttpStatus.OK);
-
 	}
 
 }
