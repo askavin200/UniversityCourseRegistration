@@ -1,5 +1,6 @@
 package com.capgemini.UniversityCourseSelection.controllers;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
@@ -9,7 +10,8 @@ import java.util.Optional;
 import com.capgemini.UniversityCourseSelection.entities.Admission;
 import com.capgemini.UniversityCourseSelection.entities.AdmissionStatus;
 import com.capgemini.UniversityCourseSelection.entities.Applicant;
-
+import com.capgemini.UniversityCourseSelection.exception.NotFoundException;
+import com.capgemini.UniversityCourseSelection.exception.NotLoggedInException;
 import com.capgemini.UniversityCourseSelection.services.IApplicantService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -118,14 +120,12 @@ class ApplicantControllerTest {
 	@Test
 	void testGetById_success() throws Exception {
 		Mockito.when(service.viewApplicant(1)).thenReturn(Optional.ofNullable(app1));
-		
+
 		MockHttpSession session = new MockHttpSession();
 		session.setAttribute("applicant", 1);
 
-		String getBody = objectWriter.writeValueAsString(app1);
-
-		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/applicant/get/1")
-				.contentType(MediaType.APPLICATION_JSON).content(getBody).accept(MediaType.APPLICATION_JSON);
+		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/applicant/get/1").session(session)
+				.contentType(MediaType.APPLICATION_JSON);
 
 		mvc.perform(mockRequest).andExpect(status().isOk());
 
@@ -148,6 +148,46 @@ class ApplicantControllerTest {
 
 		mvc.perform(mockRequest).andExpect(status().isOk());
 
+	}
+
+	@Test
+	void testGetAll_NotLoggedIn() throws Exception {
+		MockHttpSession session = new MockHttpSession();
+
+		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/applicant/get/1").session(session)
+				.contentType(MediaType.APPLICATION_JSON);
+
+		assertThatThrownBy(() -> mvc.perform(mockRequest)).hasRootCauseInstanceOf(NotLoggedInException.class);
+
+	}
+
+	@Test
+	void testGetAll_NotFoundException() throws Exception {
+		MockHttpSession session = new MockHttpSession();
+
+		Mockito.when(service.viewApplicant(7)).thenReturn(Optional.ofNullable(null));
+
+		session.setAttribute("commitee", 1);
+
+		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/applicant/get/7").session(session)
+				.contentType(MediaType.APPLICATION_JSON);
+
+		assertThatThrownBy(() -> mvc.perform(mockRequest)).hasRootCauseInstanceOf(NotFoundException.class);
+
+	}
+
+	@Test
+	void testDeleteApplicant_NotFoundException() throws Exception {
+		MockHttpSession session = new MockHttpSession();
+		Applicant app = new Applicant();
+		session.setAttribute("commitee", 1);
+
+		String delBody = objectWriter.writeValueAsString(app);
+
+		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.delete("/applicant/delete").session(session)
+				.contentType(MediaType.APPLICATION_JSON).content(delBody).accept(MediaType.APPLICATION_JSON);
+		
+		assertThatThrownBy(() -> mvc.perform(mockRequest)).hasRootCauseInstanceOf(NotFoundException.class);
 	}
 
 }
