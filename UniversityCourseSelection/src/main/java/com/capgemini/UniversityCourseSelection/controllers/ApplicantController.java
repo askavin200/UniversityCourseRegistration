@@ -55,7 +55,10 @@ public class ApplicantController {
 	}
 
 	@PutMapping("/update")
-	public ResponseEntity<Applicant> updateApplication(@RequestBody Applicant applicant) {
+	public ResponseEntity<Applicant> updateApplication(@RequestBody Applicant applicant,HttpServletRequest request) {
+		
+		boolean valid=checkSession(request,"commitee");
+		
 		if (applicant == null || applicant.getApplicantId() == null) {
 			throw new NotFoundException("Applicant or Id can't be null!");
 		}

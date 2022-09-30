@@ -151,7 +151,7 @@ class ApplicantControllerTest {
 	}
 
 	@Test
-	void testGetAll_NotLoggedIn() throws Exception {
+	void testGetById_NotLoggedIn() throws Exception {
 		MockHttpSession session = new MockHttpSession();
 
 		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/applicant/get/1").session(session)
@@ -162,7 +162,7 @@ class ApplicantControllerTest {
 	}
 
 	@Test
-	void testGetAll_NotFoundException() throws Exception {
+	void testGetById_NotFoundException() throws Exception {
 		MockHttpSession session = new MockHttpSession();
 
 		Mockito.when(service.viewApplicant(7)).thenReturn(Optional.ofNullable(null));
@@ -186,8 +186,47 @@ class ApplicantControllerTest {
 
 		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.delete("/applicant/delete").session(session)
 				.contentType(MediaType.APPLICATION_JSON).content(delBody).accept(MediaType.APPLICATION_JSON);
-		
+
 		assertThatThrownBy(() -> mvc.perform(mockRequest)).hasRootCauseInstanceOf(NotFoundException.class);
+	}
+
+	@Test
+	void testDeleteApplication_NotLoggedIn() throws Exception {
+
+		MockHttpSession session = new MockHttpSession();
+
+		String delBody = objectWriter.writeValueAsString(app1);
+
+		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.delete("/applicant/delete").session(session)
+				.contentType(MediaType.APPLICATION_JSON).content(delBody).accept(MediaType.APPLICATION_JSON);
+
+		assertThatThrownBy(() -> mvc.perform(mockRequest)).hasRootCauseInstanceOf(NotLoggedInException.class);
+	}
+
+	@Test
+	void testApplyForCourse_AdmissionNull() throws Exception {
+		Applicant app4 = new Applicant();
+		Mockito.when(service.addApplicant(app4)).thenThrow(NotFoundException.class);
+
+		String body = objectWriter.writeValueAsString(app4);
+
+		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/applicant/apply")
+				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).content(body);
+
+		assertThatThrownBy(() -> mvc.perform(mockRequest)).hasRootCauseInstanceOf(NotFoundException.class);
+
+	}
+	
+	@Test
+	void testGetAll_NotLoggedIn() throws Exception {
+		MockHttpSession session = new MockHttpSession();
+		
+
+		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/applicant/getAll/0").session(session)
+				.contentType(MediaType.APPLICATION_JSON);
+
+		assertThatThrownBy(() -> mvc.perform(mockRequest)).hasRootCauseInstanceOf(NotLoggedInException.class);
+
 	}
 
 }
