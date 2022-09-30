@@ -59,8 +59,10 @@ class CourseServiceImplTest {
 	
 	@Test
 	void testViewCourse_success() {
+		Mockito.when(courseRepo.existsById(COURSE_2.getCourseId())).thenReturn(true);	
 		Mockito.when(courseRepo.findById(COURSE_2.getCourseId())).thenReturn(Optional.ofNullable(COURSE_2));
-		assertNotNull(courseService.viewCourse(2));
+			assertNotNull(courseService.viewCourse(2));
+			assertEquals(COURSE_2, courseService.viewCourse(2));
 	}
 
 	@Test
@@ -89,22 +91,23 @@ class CourseServiceImplTest {
 		assertThrows(NotFoundException.class, ()->{
 			courseService.removeCourse(3);
 		});
+		
 	}
 	
-//	@Test
-//	void updateCourse_failWhenNotFound() {
-//		Course updateCourse = COURSE_2;
-//		Mockito.when(courseRepo.existsById(updateCourse.getCourseId())).thenReturn(false);
-//		assertThrows(NotFoundException.class, ()->{
-//			courseService.updateCourse(updateCourse);
-//		});
-//	}
+	@Test
+	void updateCourse_failWhenNotFound() {
+		Course updateCourse = COURSE_2;
+		Mockito.when(courseRepo.existsById(updateCourse.getCourseId())).thenReturn(false);
+		assertThrows(NotFoundException.class, ()->{
+			courseService.updateCourse(updateCourse);
+		});
+	}
 	
-//	@Test
-//	void viewCourse_failWhenNotFound() {
-//		Mockito.when(courseRepo.existsById(3)).thenReturn(false);
-//		assertThrows(NotFoundException.class, ()->{courseService.viewCourse(3);});
-//	}
+	@Test
+	void viewCourse_failWhenNotFound() {
+		Mockito.when(courseRepo.existsById(3)).thenReturn(false);
+		assertThrows(NotFoundException.class, ()->{courseService.viewCourse(3);});
+	}
 	
 	@Test
 	void viewAllStaffs_failWhenNoRecords() {
