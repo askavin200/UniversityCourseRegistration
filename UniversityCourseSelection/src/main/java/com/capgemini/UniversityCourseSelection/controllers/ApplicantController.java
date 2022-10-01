@@ -82,6 +82,7 @@ public class ApplicantController {
 	@DeleteMapping("/delete")
 	public ResponseEntity<Applicant> deleteApplication(@RequestBody Applicant applicant, HttpServletRequest request) {
 		boolean valid = checkSession(request, "commitee");
+		String host = String.valueOf(request.getServerPort());
 		
 		if (!valid) {
 			throw new NotLoggedInException(
