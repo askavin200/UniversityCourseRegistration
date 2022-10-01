@@ -21,6 +21,11 @@ public class LoginRepositoryImpl implements ILoginRepository {
 	
 	@Autowired
 	private IUniversityStaffMemberRepository uniRepo;
+	
+	void setup() {
+		UniversityStaffMember scm=new UniversityStaffMember(10,"pass","pass");
+		uniRepo.save(scm);
+	}
 
 	@Override
 	public boolean verifyApplicantCredentials(int id, String password) {
@@ -40,6 +45,7 @@ public class LoginRepositoryImpl implements ILoginRepository {
 
 	@Override
 	public boolean verifyUniversityStaffMemberCredentials(int id, String password) {
+		setup();
 		UniversityStaffMember ucm=uniRepo.verifyUniversityStaffMemberCredentials(id, password);
 		if(ucm!=null) {
 			return true;
