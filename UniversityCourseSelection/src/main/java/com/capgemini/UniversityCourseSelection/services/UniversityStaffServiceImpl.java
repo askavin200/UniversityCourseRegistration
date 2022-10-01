@@ -5,7 +5,6 @@ import java.util.List;
 import com.capgemini.UniversityCourseSelection.entities.Course;
 import com.capgemini.UniversityCourseSelection.entities.UniversityStaffMember;
 import com.capgemini.UniversityCourseSelection.exception.NotFoundException;
-import com.capgemini.UniversityCourseSelection.repo.ICourseRepository;
 import com.capgemini.UniversityCourseSelection.repo.IUniversityStaffMemberRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +55,10 @@ public class UniversityStaffServiceImpl implements IUniversityStaffService{
 
 	@Override
 	public List<UniversityStaffMember> viewAllStaffs() {
-		return staffRepo.findAll();
+		List<UniversityStaffMember> usmList = staffRepo.findAll();
+		if(usmList.isEmpty())
+			throw new NotFoundException("No staff records found!");
+		return usmList;
 	}
 
 	@Override

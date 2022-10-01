@@ -1,7 +1,10 @@
 package com.capgemini.UniversityCourseSelection.services;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,7 +16,9 @@ import com.capgemini.UniversityCourseSelection.entities.Applicant;
 import com.capgemini.UniversityCourseSelection.entities.Course;
 import com.capgemini.UniversityCourseSelection.exception.NotFoundException;
 import com.capgemini.UniversityCourseSelection.repo.IAdmissionCommiteeMemberRepository;
+import com.capgemini.UniversityCourseSelection.repo.IAdmissionRepository;
 import com.capgemini.UniversityCourseSelection.repo.IApplicantRepository;
+import com.capgemini.UniversityCourseSelection.repo.ICourseRepository;
 
 @Component
 public class AdmissionCommitteeMemberServiceImpl implements IAdmissionCommiteeMemberService {
@@ -24,12 +29,19 @@ public class AdmissionCommitteeMemberServiceImpl implements IAdmissionCommiteeMe
 	@Autowired
 	private IApplicantRepository applicantRepo;
 
+	@Autowired
+	private IAdmissionRepository admissionRepo;
+
+	@Autowired
+	private ICourseRepository courseRepo;
+
 	@Override
 	public AdmissionCommiteeMember addCommitteeMember(AdmissionCommiteeMember member) {
 		return repo.save(member);
 	}
 
 	@Override
+	@Transactional
 	public AdmissionCommiteeMember updateCommitteeMember(AdmissionCommiteeMember member) {
 		if (repo.existsById(member.getAdminId())) {
 			return repo.save(member);
@@ -48,6 +60,7 @@ public class AdmissionCommitteeMemberServiceImpl implements IAdmissionCommiteeMe
 	}
 
 	@Override
+	@Transactional
 	public void removeCommitteeMember(int id) {
 		if (repo.existsById(id)) {
 			repo.deleteById(id);
@@ -63,17 +76,28 @@ public class AdmissionCommitteeMemberServiceImpl implements IAdmissionCommiteeMe
 	}
 
 	@Override
-	public AdmissionStatus provideAdmissionResult(Applicant applicant, Admission admission) {
-
-		// get the course object
+	public AdmissionStatus provideAdmissionResult(Applicant app, Admission adm) {
+		
+		// checking if the objects actually exists in DB or not
+		Applicant applicant = null;
+		Admission admission = null;
 		Course course = null;
-		int id = admission.getCourseId();
-		course = repo.getCourseById(id);
-
-		// if course is not found, return admission status as rejected/pending
-		if (course == null) {
-			applicant.setStatus(AdmissionStatus.PENDING);
+				
+		if (courseRepo.existsById(adm.getCourseId())) {
+			course = courseRepo.findById(adm.getCourseId()).get();
+		} else {
+			throw new NotFoundException("The course id: " + adm.getCourseId() + " doesnot exists !");
 		}
+		
+
+		if (applicantRepo.existsById(app.getApplicantId()) && admissionRepo.existsById(adm.getAdmissionId())) {
+			applicant = applicantRepo.findById(app.getApplicantId()).get();
+			admission = admissionRepo.findById(adm.getAdmissionId()).get();
+		} else {
+			throw new NotFoundException("The Admission id: " + adm.getAdmissionId() + " or Applicant id: "
+					+ app.getApplicantId() + "  doesnot exists !");
+		}
+
 
 		// criteria 1 (admission date)
 		LocalDate admissionDate = admission.getAdmissionDate();
@@ -81,23 +105,29 @@ public class AdmissionCommitteeMemberServiceImpl implements IAdmissionCommiteeMe
 
 		if (admissionDate.isAfter(courseStartDate)) {
 			applicant.setStatus(AdmissionStatus.REJECTED);
-		}
+			admission.setStatus(AdmissionStatus.REJECTED);
 
+			applicantRepo.save(applicant);
+			return applicant.getStatus();
+		}
+		
 		// criteria 1 satisfied
 
 		// criteria 2 ( percentage )
 
 		double courseCriteria = course.getCourseCriteria();
-
 		double marks = applicant.getApplicantGraduationPercentage();
 
 		if (marks < courseCriteria) {
 			applicant.setStatus(AdmissionStatus.PENDING);
+			admission.setStatus(AdmissionStatus.PENDING);
 		} else {
+			admission.setStatus(AdmissionStatus.CONFIRMED);
 			applicant.setStatus(AdmissionStatus.CONFIRMED);
 		}
 
 		// criteria 2 satisfied
+		
 		applicantRepo.save(applicant);
 		return applicant.getStatus();
 
